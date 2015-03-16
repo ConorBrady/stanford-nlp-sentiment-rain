@@ -6,6 +6,8 @@ GEM
       execjs
     coffee-script-source (1.9.1)
     execjs (2.4.0)
+    haml (4.0.6)
+      tilt
     rack (1.6.0)
     rack-coffee (1.0.3)
       coffee-script
@@ -23,6 +25,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  haml
   rack-coffee
   sass
   sinatra
