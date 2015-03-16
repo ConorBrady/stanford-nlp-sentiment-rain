@@ -2,7 +2,14 @@
 %html
   %head
     %title Sentiment Rain
+
+    %link{rel: 'stylesheet', href: 'https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css'}
     %link{rel: 'stylesheet', href: '/stylesheets/app.css'}
-    %script{src: "/js/app.js"}
+
+
+
   %body
     .container= yield
+
+    %script{src: 'https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'}
+    %script{src: "/js/app.js"}
