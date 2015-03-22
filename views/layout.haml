@@ -5,6 +5,7 @@
 
     %link{rel: 'stylesheet', href: 'https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css'}
     %link{rel: 'stylesheet', href: 'https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css'}
+    %link{rel: "stylesheet", href: "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css"}
     %link{rel: 'stylesheet', href: '/stylesheets/app.css'}
 
   %body
@@ -14,4 +15,28 @@
     %script{src: 'http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js'}
     %script{src: 'https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'}
     %script{src: 'https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'}
+    %script{src: "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"}
+    %script{src: "/js/Audiolet.js"}
     %script{src: "/js/app.js"}
+
+    :coffeescript
+
+        window.twttr = (d, s, id) ->
+
+            fjs = d.getElementsByTagName(s)[0]
+            t = window.twttr || {}
+
+            return if d.getElementById(id)
+
+            js = d.createElement(s)
+            js.id = id
+            js.src = "https://platform.twitter.com/widgets.js"
+            fjs.parentNode.insertBefore js, fjs
+
+            t._e = []
+            t.ready = (f) ->
+                t._e.push f
+
+            return t
+
+        window.twttr document, "script", "twitter-wjs"

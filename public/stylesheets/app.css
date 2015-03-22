@@ -1,2 +1,2 @@
-#map{position:absolute;top:0;bottom:0;left:0;right:0}
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);#map{position:absolute;top:0;bottom:0;left:0;right:0}#datetime{color:#fff;position:fixed;bottom:50px;right:20px;font-family:"Ubuntu",sans-serif;width:400px;text-align:center}#time{font-size:100px;text-align:center}#date{font-size:30px;text-align:center}#frame{position:fixed;width:400px;height:640px;right:20px;top:20px}#slider{position:fixed;width:calc(100% - 500px);bottom:80px;left:60px}
 /*# sourceMappingURL=app.css.map */

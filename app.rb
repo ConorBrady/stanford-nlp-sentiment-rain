@@ -1,6 +1,7 @@
 require 'net/http'
 require 'json'
 require 'open-uri'
+require 'time'
 
 get '/' do
     haml :index, format: :html5
@@ -22,9 +23,9 @@ get '/tweets' do
 
     content_type :json
 
-    query  = "select coordinates, text, created "
+    query  = "select id, coordinates, text, created "
     query += "from DublinMarathon "
-    query += "where text.language='en' and coordinates is not null and created > '#{ params[:since] || 0 }' "
+    query += "where text.language='en' and coordinates is not null and created > '#{ Time.at(params[:since].to_i/1000).to_s || 0 }' "
     query += "order by created asc"
 
     url = URI.parse("http://graisearch.scss.tcd.ie/query/Graisearch/sql/#{ URI::encode(query) }/#{ params[:limit] || 20 }/*:1")
@@ -44,11 +45,18 @@ get '/tweets' do
 
         y = {}
 
+        y['id'] = x['id']
         y['lat']  = x['coordinates']['latitude']
         y['lon']  = x['coordinates']['longitude']
-        y['text'] = /(.*) http.*/.match(x['text']['message'])[1]
-        y['link'] = /.* (http[s]?:\/\/t.co\/\w+).*/.match(x['text']['message'])[1]
-        y['created_at'] = x['created'].tr(' ', 'T')
+        matches = /(.*)(http[s]?:\/\/t.co\/\w+).*/.match(x['text']['message'])
+        unless matches.nil?
+            y['text'] = matches[1]
+            y['link'] = matches[2]
+        else
+            y['text'] = x['text']['message']
+            y['link'] = nil
+        end
+        y['created_at'] = (Time.parse(x['created']).to_i*1000).to_s
 
         data << y
 
