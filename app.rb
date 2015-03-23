@@ -22,7 +22,8 @@ end
 get '/tweets' do
 
     content_type :json
-
+    cache_control :public, :max_age => 7200
+    
     query  = "select id, coordinates, text, created "
     query += "from DublinMarathon "
     query += "where text.language='en' and coordinates is not null and created > '#{ Time.at(params[:since].to_i/1000).to_s || 0 }' "
