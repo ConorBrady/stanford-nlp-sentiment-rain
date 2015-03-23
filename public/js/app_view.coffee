@@ -45,7 +45,7 @@ class window.AppView
         for t in _.rest((t for t in @tweetViews when t.hasShown() and not t.isProtected()).reverse(), 8)
             t.silence()
 
-        if ( t for t in @tweetViews when not t.hasShown() ).length < 5
+        if ( t for t in @tweetViews when not t.hasShown() ).length < 20
             @tweetProducer.setCurrentTime time
             @tweetProducer.requestMore()
 

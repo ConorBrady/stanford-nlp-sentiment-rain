@@ -26,7 +26,7 @@ class window.TweetProducer
 
             url: "#{location.protocol}//#{location.host}/tweets"
             data:
-                limit: 5
+                limit: 10
                 since: @time
 
             success: (response) =>
