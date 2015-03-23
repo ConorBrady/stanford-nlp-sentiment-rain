@@ -60,13 +60,9 @@ class window.TweetView
 
     draw: (time) ->
 
-        # if time > @t.created_at and @soundSource is undefined and (time + 0.05*SECOND*SPEED) % 250*SPEED is 0
-        #
-
-
         if time > @t.created_at
 
-            @_show() unless @shown || time % (125*SPEED) isnt 0
+            @_show() unless @shown || time % (125*SPEED) isnt 0 || not @_inView()
 
             unless @destroyed
 
@@ -90,7 +86,18 @@ class window.TweetView
 
     isDestroyed: -> @destroyed
 
-    _prepare: ->
+    _inView: ->
+
+        point = @map.latLngToLayerPoint [@t.lat,@t.lon]
+        size = @map.getSize()
+
+        x = point.x/size.x
+        y = point.y/size.y
+
+        x > 0 and x < 1 and y > 0 and y < 1
+
+
+    _show: ->
 
         @soundSource = new SoundSource @t.sentiment, @audiolet
 
@@ -105,12 +112,7 @@ class window.TweetView
         f = (x) -> Math.pow( x - 0.5, 2 )
         @soundSource.setVolume 1/(1+9*(f(x)+f(y)))
 
-    _show: ->
-
-        @_prepare()
         @circle.addTo @featureGroup
-
-        #@soundSource.trigger()
 
         @shown = true
 

@@ -3,13 +3,14 @@ class window.SoundSource
 
     constructor: ( value, audiolet ) ->
 
-        @scale = new MajorScale()
+        @scale = new MinorScale()
 
-        degree = Math.floor(value*16.0)
-        degree+1 if degree % 7 is 6
-        degree-1 if degree % 7 is 1
+        degree = Math.floor(value*32.0)
+        # degree+=1 if degree % 7 is 6
+        degree-=1 if degree % 7 is 1
+        degree-=1 if degree % 7 is 5
 
-        frequency = @scale.getFrequency degree, 65.4064, 2
+        frequency = @scale.getFrequency degree, 65.4064, 1
 
         @wave = new Square audiolet, frequency
         @gain = new Multiply audiolet, 0
@@ -44,10 +45,6 @@ class window.SoundSource
     setVolume: (level) -> @pad.value.setValue Math.min(level,1.0)
 
     setPan: (pan) -> @pan.pan.setValue pan
-
-    trigger: ->
-
-        @env.gate.setValue 1
 
     destroy: ->
 

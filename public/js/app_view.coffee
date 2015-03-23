@@ -30,7 +30,7 @@ class window.AppView
 
             tv.circle.on 'click', =>
 
-                ( t.unprotect() for t in @tweetViews )
+                ( tv2.unprotect() for tv2 in @tweetViews )
                 tv.protect()
                 $("#frame").html ""
                 twttr.widgets.createTweet t.id, document.getElementById("frame"),
@@ -42,7 +42,7 @@ class window.AppView
 
         t.draw(time) for t in @tweetViews
 
-        for t in _.rest((t for t in @tweetViews when t.hasShown() and not t.isProtected()).reverse(), 8)
+        for t in _.rest((t for t in @tweetViews when t.hasShown() and not t.isProtected()).reverse(), 5)
             t.silence()
 
         if ( t for t in @tweetViews when not t.hasShown() ).length < 20
@@ -53,3 +53,4 @@ class window.AppView
 
         ( t.destroy() for t in @tweetViews )
         @tweetProducer.reset()
+        $("#frame").html ""
