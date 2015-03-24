@@ -8,5 +8,5 @@ window.SPEED = SECOND/SECOND # live real time
 window.FPS = 12
 window.FPMS = FPS/SECOND
 
-window.CIRCLE_DECAY = MINUTE*SPEED 
+window.CIRCLE_DECAY = 0.25*MINUTE*SPEED 
 window.CIRCLE_RADIUS = 70

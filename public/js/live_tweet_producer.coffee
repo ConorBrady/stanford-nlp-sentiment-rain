@@ -28,9 +28,6 @@ class window.LiveTweetProducer
         $.ajax
 
             url: "#{location.protocol}//#{location.host}/live_tweets"
-            data:
-                limit: 20
-                since: @lastRecievedId
 
             success: (response) =>
 

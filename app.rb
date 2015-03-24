@@ -27,7 +27,8 @@ get '/live_tweets' do
     data = client.search("",
             geocode: "37.777222,-122.411111,4km",
             lang: 'en',
-            count: params[:limit] || 20 )
+            count: params[:limit] || 60,
+            result_type: 'recent' )
         .collect do |tweet|
 
         y = {}
