@@ -1,22 +1,26 @@
 
-class window.TweetProducer
+class window.ScenarioTweetProducer
 
-    constructor: (tweetAccepter) ->
+    constructor: ->
+
         @makingRequest = no
         @time = 0
-        @tweetAccepter = tweetAccepter
+        @lastRecievedTime = 0
 
-    setCurrentTime: (time) -> @time = time if time > @time
+
+    setTweetCallback: (tc) -> @tc = tc
 
     reset: -> @time = 0
 
-    requestMore: ->
+    setCurrentTime: (time) ->
 
-        unless @makingRequest
+        @time = time if time > @time
+
+        if not @makingRequest and @time > @lastRecievedTime - 6*SECOND*SPEED
             @makingRequest = yes
             @_getTweets (tweets) =>
                 @time = _.last(@time).created_at if _.last(@time)?
-                ( @tweetAccepter(t) for t in tweets )
+                ( @tc(t) for t in tweets )
                 @makingRequest = no
 
 
@@ -24,7 +28,7 @@ class window.TweetProducer
 
         $.ajax
 
-            url: "#{location.protocol}//#{location.host}/tweets"
+            url: "#{location.protocol}//#{location.host}/scenario_tweets"
             data:
                 limit: 10
                 since: @time
@@ -34,6 +38,8 @@ class window.TweetProducer
                 fixDate = (t) ->
                     t.created_at = parseInt(t.created_at)
                     return t
+
+                @lastRecievedTime = fixDate(_.last(response.data)).created_at
 
                 completion(fixDate t for t in response.data)
 

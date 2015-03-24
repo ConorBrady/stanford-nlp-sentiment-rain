@@ -4,26 +4,62 @@ require 'open-uri'
 require 'time'
 
 get '/' do
-    haml :index, format: :html5
+    redirect '/scenario'
 end
 
-class NilClass
+get '/scenario' do
+    haml :scenario, format: :html5
+end
 
-  def missing_method(*_)
-    nil
-  end
+get '/live' do
+    haml :live, format: :html5
+end
 
-  def respond_to_missing?(*_)
-    true
-  end
+get '/live_tweets' do
+
+    client = Twitter::REST::Client.new do |config|
+        config.consumer_key        = ENV["SENTIMENT_RAIN_TW_KEY"]
+        config.consumer_secret     = ENV["SENTIMENT_RAIN_TW_SECRET"]
+    end
+
+    content_type :json
+
+    data = client.search("",
+            geocode: "37.777222,-122.411111,4km",
+            lang: 'en',
+            count: params[:limit] || 20 )
+        .collect do |tweet|
+
+        y = {}
+
+        y['id'] = /\/(\d+)$/.match(tweet.url.to_s)[1]
+        y['lat']  = tweet.geo.lat
+        y['lon']  = tweet.geo.lng
+
+        y['text'] = tweet.text
+        y['link'] = tweet.url
+
+        y['created_at'] = (tweet.created_at.to_i*1000).to_s
+        y['created_at_readable'] = tweet.created_at
+        y
+    end
+
+    data.reverse!
+
+    _get_sentiment( data.map { |x| x['text'] } ).map.with_index { |x,i| data[i]['sentiment'] = x }
+
+    response = {}
+    response['data'] = data
+
+    return response.to_json
 
 end
 
-get '/tweets' do
+get '/scenario_tweets' do
 
     content_type :json
     cache_control :public, :max_age => 7200
-    
+
     query  = "select id, coordinates, text, created "
     query += "from DublinMarathon "
     query += "where text.language='en' and coordinates is not null and created > '#{ Time.at(params[:since].to_i/1000).to_s || 0 }' "

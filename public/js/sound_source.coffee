@@ -8,7 +8,8 @@ class window.SoundSource
         degree = Math.floor(value*32.0)
         # degree+=1 if degree % 7 is 6
         degree-=1 if degree % 7 is 1
-        degree-=1 if degree % 7 is 5
+        degree-=1 if degree % 7 is 3
+        degree+=1 if degree % 7 is 6
 
         frequency = @scale.getFrequency degree, 65.4064, 1
 

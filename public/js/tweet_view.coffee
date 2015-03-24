@@ -62,7 +62,7 @@ class window.TweetView
 
         if time > @t.created_at
 
-            @_show() unless @shown || time % (125*SPEED) isnt 0 || not @_inView()
+            @_show() unless @shown || not @_inView()
 
             unless @destroyed
 

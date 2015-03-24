@@ -1,7 +1,7 @@
 
 class window.AppView
 
-    constructor: ->
+    constructor: (center, tweetProducer) ->
 
         L.mapbox.accessToken = 'pk.eyJ1IjoiY29ub3JicmFkeSIsImEiOiJwTHkxcE9nIn0.tQZaXyeR81SGW8XhtmwhPQ'
 
@@ -10,10 +10,10 @@ class window.AppView
         @map = L.mapbox.map 'map', 'examples.3hqcl3di',
             minZoom: 14
             maxZoom: 14
-            zoom: 14
-            center: [53.34478682683074, -6.256713864687526]
+            zoom: 13
+            center: center
             zoomControl: false
-            maxBounds: [[53.243244, -6.458032],[53.422022, -6.037805]]
+        #    maxBounds: [[53.243244, -6.458032],[53.422022, -6.037805]]
 
         @featureGroup = L.featureGroup()
             .addTo(@map)
@@ -23,7 +23,8 @@ class window.AppView
 
         @tweetViews = []
 
-        @tweetProducer = new TweetProducer (t) =>
+        @tweetProducer = tweetProducer
+        @tweetProducer.setTweetCallback (t) =>
 
             tv = new TweetView t, @audiolet, @map, @featureGroup
             @tweetViews.push tv
@@ -33,7 +34,7 @@ class window.AppView
                 ( tv2.unprotect() for tv2 in @tweetViews )
                 tv.protect()
                 $("#frame").html ""
-                twttr.widgets.createTweet t.id, document.getElementById("frame"),
+                avar = twttr.widgets.createTweet t.id, document.getElementById("frame"),
                     align: 'center'
 
     draw: (time) ->
@@ -45,12 +46,9 @@ class window.AppView
         for t in _.rest((t for t in @tweetViews when t.hasShown() and not t.isProtected()).reverse(), 5)
             t.silence()
 
-        if ( t for t in @tweetViews when not t.hasShown() ).length < 20
-            @tweetProducer.setCurrentTime time
-            @tweetProducer.requestMore()
-
-    discardState: ->
+    reset: ->
 
         ( t.destroy() for t in @tweetViews )
+        @tweetViews = []
         @tweetProducer.reset()
         $("#frame").html ""
