@@ -37,6 +37,7 @@ class window.ScenarioTweetProducer
 
                 fixDate = (t) ->
                     t.created_at = parseInt(t.created_at)
+                    t.created_at -= t.created_at % (250*SPEED) # QUANTIZE
                     return t
 
                 @lastRecievedTime = fixDate(_.last(response.data)).created_at
