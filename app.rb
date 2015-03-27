@@ -7,6 +7,10 @@ get '/' do
     redirect '/scenario'
 end
 
+get '/slides' do
+    haml :slideshow, layout: false
+end
+
 get '/scenario' do
     haml :scenario, format: :html5
 end
