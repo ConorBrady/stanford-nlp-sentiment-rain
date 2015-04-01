@@ -46,7 +46,7 @@ get '/live_tweets' do
     end
 
     data.reverse!
-    puts data
+
     _get_sentiment( data.map { |x| x['text'] } ).map.with_index { |x,i| data[i]['sentiment'] = x }
 
     response = {}
@@ -114,7 +114,7 @@ end
 def _get_sentiment(lines)
 
     url = URI.parse("http://stanford-nlp.conorbrady.com/sentiment?lines=#{ lines.map { |l| URI::encode(l) }.join('&lines=') }")
-    puts url
+
     request = Net::HTTP::Get.new(url.to_s)
     request.basic_auth('conor','conorjbrady1@gmail.com')
 
