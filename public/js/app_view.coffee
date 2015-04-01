@@ -9,8 +9,8 @@ class window.AppView
 
         @map = L.mapbox.map 'map', 'examples.3hqcl3di',
             minZoom: 14
-            maxZoom: 14
-            zoom: 13
+            maxZoom: 15
+            zoom: 14
             center: center
             zoomControl: false
         #    maxBounds: [[53.243244, -6.458032],[53.422022, -6.037805]]

@@ -7,10 +7,6 @@ get '/' do
     redirect '/scenario'
 end
 
-get '/slides' do
-    haml :slideshow, layout: false
-end
-
 get '/scenario' do
     haml :scenario, format: :html5
 end
@@ -31,7 +27,7 @@ get '/live_tweets' do
     data = client.search("",
             geocode: "37.777222,-122.411111,4km",
             lang: 'en',
-            count: params[:limit] || 60,
+            count: params[:limit] || 30,
             result_type: 'recent' )
         .collect do |tweet|
 
@@ -50,7 +46,7 @@ get '/live_tweets' do
     end
 
     data.reverse!
-
+    puts data
     _get_sentiment( data.map { |x| x['text'] } ).map.with_index { |x,i| data[i]['sentiment'] = x }
 
     response = {}
@@ -118,7 +114,7 @@ end
 def _get_sentiment(lines)
 
     url = URI.parse("http://stanford-nlp.conorbrady.com/sentiment?lines=#{ lines.map { |l| URI::encode(l) }.join('&lines=') }")
-
+    puts url
     request = Net::HTTP::Get.new(url.to_s)
     request.basic_auth('conor','conorjbrady1@gmail.com')
 
