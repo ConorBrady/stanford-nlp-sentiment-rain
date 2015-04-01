@@ -27,7 +27,7 @@ get '/live_tweets' do
     data = client.search("",
             geocode: "37.777222,-122.411111,4km",
             lang: 'en',
-            count: params[:limit] || 30,
+            count: params[:limit] || 20,
             result_type: 'recent' )
         .collect do |tweet|
 
@@ -45,9 +45,12 @@ get '/live_tweets' do
         y
     end
 
-    data.reverse!
+    data.reverse!.select! { |d| not d['lat'].nil? }
 
-    _get_sentiment( data.map { |x| x['text'] } ).map.with_index { |x,i| data[i]['sentiment'] = x }
+    BATCH_SIZE = 10
+    (0..data.length/BATCH_SIZE).each do |i|
+        _get_sentiment( data[i*BATCH_SIZE,BATCH_SIZE].map { |x| x['text'] } ).map.with_index { |x,j| data[i*BATCH_SIZE+j]['sentiment'] = x }
+    end
 
     response = {}
     response['data'] = data
