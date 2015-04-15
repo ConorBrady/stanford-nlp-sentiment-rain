@@ -27,7 +27,7 @@ class window.LiveTweetProducer
 
         $.ajax
 
-            url: "#{location.protocol}//#{location.host}/live_tweets?since=#{@time-CIRCLE_DECAY}"
+            url: "#{location.protocol}//#{location.host}/live_tweets?since=#{@lastRecievedTime}"
 
 
             success: (response) =>
@@ -36,8 +36,8 @@ class window.LiveTweetProducer
                     t.created_at = parseInt(t.created_at)
                     return t
                 dataset = ( fixDate t for t in response.data when t.id > @lastRecievedId )
-                @lastRecievedTime = _.first(dataset).created_at if dataset.length > 0
-                @lastRecievedId = _.first(dataset).id if dataset.length > 0
+                @lastRecievedTime = _.last(dataset).created_at if dataset.length > 0
+                @lastRecievedId = _.last(dataset).id if dataset.length > 0
 
                 completion(dataset)
 
