@@ -2,6 +2,9 @@ require 'net/http'
 require 'json'
 require 'open-uri'
 require 'time'
+require 'logger'
+
+log = Logger.new(STDOUT)
 
 get '/' do
     redirect '/scenario'
@@ -17,6 +20,7 @@ end
 
 get '/live_tweets' do
 
+
     client = Twitter::REST::Client.new do |config|
         config.consumer_key        = ENV["SENTIMENT_RAIN_TW_KEY"]
         config.consumer_secret     = ENV["SENTIMENT_RAIN_TW_SECRET"]
@@ -24,13 +28,19 @@ get '/live_tweets' do
 
     content_type :json
 
+    unless params[:since]
+        status 400
+        return { 'error' => ":since parameter missing" }.to_json
+    end
+
+    puts "Requesting from Twitter"
     data = client.search("",
             geocode: "37.777222,-122.411111,4km",
             lang: 'en',
-            count: params[:limit] || 20,
             result_type: 'recent' )
+        .take_while { |t| (t.created_at.to_i*1000).to_s > params[:since] }
         .collect do |tweet|
-
+        puts "Recieved a tweet #{tweet.text}"
         y = {}
 
         y['id'] = /\/(\d+)$/.match(tweet.url.to_s)[1]
@@ -45,6 +55,7 @@ get '/live_tweets' do
         y
     end
 
+    puts "Tweets recieved"
     data.reverse!.select! { |d| not d['lat'].nil? }
 
     BATCH_SIZE = 10
