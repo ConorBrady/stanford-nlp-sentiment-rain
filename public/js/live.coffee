@@ -17,7 +17,7 @@ $ ->
 
             @offset = 0
 
-            @startTime = new Date(Date.now()-0.5*MINUTE).getTime()
+            @startTime = new Date(Date.now()-MINUTE).getTime()
             @startTime -= @startTime%(125*SPEED) # Beat quantization fix
 
             setInterval =>
