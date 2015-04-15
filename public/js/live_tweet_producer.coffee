@@ -27,7 +27,7 @@ class window.LiveTweetProducer
 
         $.ajax
 
-            url: "#{location.protocol}//#{location.host}/live_tweets?since=#{@lastRecievedTime}"
+            url: "#{location.protocol}//#{location.host}/live_tweets?since=#{@lastRecievedTime || @time - CIRCLE_DECAY }"
 
 
             success: (response) =>
