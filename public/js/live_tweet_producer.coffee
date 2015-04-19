@@ -29,18 +29,17 @@ class window.LiveTweetProducer
 
             url: "#{location.protocol}//#{location.host}/live_tweets?since=#{@lastRecievedTime || @time - CIRCLE_DECAY }"
 
+        .done (response) =>
 
-            done: (response) =>
+            fixDate = (t) ->
+                t.created_at = parseInt(t.created_at)
+                return t
+            dataset = ( fixDate t for t in response.data when t.id > @lastRecievedId )
+            @lastRecievedTime = _.last(dataset).created_at if dataset.length > 0
+            @lastRecievedId = _.last(dataset).id if dataset.length > 0
 
-                fixDate = (t) ->
-                    t.created_at = parseInt(t.created_at)
-                    return t
-                dataset = ( fixDate t for t in response.data when t.id > @lastRecievedId )
-                @lastRecievedTime = _.last(dataset).created_at if dataset.length > 0
-                @lastRecievedId = _.last(dataset).id if dataset.length > 0
+            completion(dataset)
 
-                completion(dataset)
-
-            fail: =>
+        .fail =>
 
                 completion([])

@@ -33,17 +33,17 @@ class window.ScenarioTweetProducer
                 limit: 10
                 since: @time
 
-            done: (response) =>
+        .done (response) =>
 
-                fixDate = (t) ->
-                    t.created_at = parseInt(t.created_at)
-                    t.created_at -= t.created_at % (250*SPEED) # QUANTIZE
-                    return t
+            fixDate = (t) ->
+                t.created_at = parseInt(t.created_at)
+                t.created_at -= t.created_at % (250*SPEED) # QUANTIZE
+                return t
 
-                @lastRecievedTime = fixDate(_.last(response.data)).created_at
+            @lastRecievedTime = fixDate(_.last(response.data)).created_at
 
-                completion(fixDate t for t in response.data)
+            completion(fixDate t for t in response.data)
 
-            fail: =>
+        .fail =>
 
-                completion([])
+            completion([])
