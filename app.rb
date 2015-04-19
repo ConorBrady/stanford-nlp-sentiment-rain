@@ -22,8 +22,8 @@ get '/live_tweets' do
 
 
     client = Twitter::REST::Client.new do |config|
-        config.consumer_key        = ENV["SENTIMENT_RAIN_TW_KEY"]
-        config.consumer_secret     = ENV["SENTIMENT_RAIN_TW_SECRET"]
+        config.consumer_key        = ENV["TW_KEY"]
+        config.consumer_secret     = ENV["TW_SECRET"]
     end
 
     content_type :json
@@ -127,7 +127,7 @@ end
 
 def _get_sentiment(lines)
 
-    url = URI.parse("http://stanford-nlp.conorbrady.com/sentiment?lines=#{ lines.map { |l| URI::encode(l) }.join('&lines=') }")
+    url = URI.parse("http://#{ENV["SENTIMENT_SERVER_HOSTNAME"]}/sentiment?lines=#{ lines.map { |l| URI::encode(l) }.join('&lines=') }")
 
     request = Net::HTTP::Get.new(url.to_s)
     request.basic_auth('conor','conorjbrady1@gmail.com')
