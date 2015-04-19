@@ -33,7 +33,7 @@ class window.ScenarioTweetProducer
                 limit: 10
                 since: @time
 
-            success: (response) =>
+            done: (response) =>
 
                 fixDate = (t) ->
                     t.created_at = parseInt(t.created_at)
@@ -44,6 +44,6 @@ class window.ScenarioTweetProducer
 
                 completion(fixDate t for t in response.data)
 
-            failure: =>
+            fail: =>
 
                 completion([])

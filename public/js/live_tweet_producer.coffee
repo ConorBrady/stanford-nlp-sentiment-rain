@@ -30,7 +30,7 @@ class window.LiveTweetProducer
             url: "#{location.protocol}//#{location.host}/live_tweets?since=#{@lastRecievedTime || @time - CIRCLE_DECAY }"
 
 
-            success: (response) =>
+            done: (response) =>
 
                 fixDate = (t) ->
                     t.created_at = parseInt(t.created_at)
@@ -41,6 +41,6 @@ class window.LiveTweetProducer
 
                 completion(dataset)
 
-            failure: =>
+            fail: =>
 
                 completion([])
