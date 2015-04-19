@@ -83,7 +83,7 @@ get '/scenario_tweets' do
     url = URI.parse("http://graisearch.scss.tcd.ie/query/Graisearch/sql/#{ URI::encode(query) }/#{ params[:limit] || 20 }/*:1")
 
     req = Net::HTTP::Get.new(url.to_s)
-    req.basic_auth ENV["GRAISEARCH_USERNAME"],ENV["GRAISEARCH_PASSWORD"]
+    req.basic_auth(ENV["GRAISEARCH_USERNAME"],ENV["GRAISEARCH_PASSWORD"])
 
     res = Net::HTTP.start(url.host, url.port) do |http|
         http.request(req)
