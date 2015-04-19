@@ -130,7 +130,6 @@ def _get_sentiment(lines)
     url = URI.parse("http://#{ENV["SENTIMENT_SERVER_HOSTNAME"]}/sentiment?lines=#{ lines.map { |l| URI::encode(l) }.join('&lines=') }")
 
     request = Net::HTTP::Get.new(url.to_s)
-    request.basic_auth('conor','conorjbrady1@gmail.com')
 
     res = Net::HTTP.start(url.host, url.port) do |http|
         http.request(request)
