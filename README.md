@@ -23,7 +23,7 @@ GRAISEARCH_USERNAME
 GRAISEARCH_PASSWORD
 ```
 
-These are required for the '/scenario' endpoint, they must be valid credentials for read
+These are required for the `/scenario` endpoint, they must be valid credentials for read
 access for the dataset on the server `graisearch.scss.tcd.ie`
 
 ### Deployment
