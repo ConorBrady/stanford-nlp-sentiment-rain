@@ -28,7 +28,7 @@ class window.ScenarioTweetProducer
 
         $.ajax
 
-            url: "#{location.protocol}//#{location.host}/scenario_tweets"
+            url: "/scenario_tweets"
             data:
                 limit: 10
                 since: @time
