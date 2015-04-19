@@ -10,7 +10,9 @@ class window.ScenarioTweetProducer
 
     setTweetCallback: (tc) -> @tc = tc
 
-    reset: -> @time = 0
+    reset: ->
+        @time = 0
+        @lastRecievedTime = 0
 
     setCurrentTime: (time) ->
 
