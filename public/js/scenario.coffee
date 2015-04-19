@@ -25,6 +25,7 @@ $ ->
                 stop: => @paused = no
                 slide: (event,ui) =>
                     @view.reset()
+                    @model.reset()
                     @offset = ui.value-@startTime
                     @offset -= @offset%(125*SPEED) # Beat quantization fix :/
 
@@ -48,6 +49,7 @@ $ ->
                     @offset += SPEED/FPMS
 
                     if @offset+@startTime > @endTime
+                        @model.reset()
                         @view.reset()
                         @offset = 0
             , 1/FPMS
